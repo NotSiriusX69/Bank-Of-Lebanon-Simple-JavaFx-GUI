@@ -1,0 +1,27 @@
+* {
+	-fx-primary-color: #415FA9FF;
+	-fx-secondary-color: #4B6EAF;
+	-fx-grey-color: #b9b9b9;
+
+	-fx-focus-color: -fx-secondary-color;
+}
+
+.text-field {
+	-fx-accent: -fx-primary-color;
+	-fx-background-color: -fx-grey-color, white;
+	-fx-background-insets: 0, 0 0 1 0;
+	-fx-background-radius: 0;
+}
+.text-field:focused {
+	-fx-background-color: -fx-primary-color, white;
+}
+
+#BTN2 {
+    -fx-text-fill: -fx-primary-color;
+    -fx-background-color : white;
+    -fx-border-color: -fx-primary-color;
+}
+#BTNX2 {
+    -fx-background-color : white;
+    -fx-border-color: -fx-primary-color;
+}

@@ -1,0 +1,60 @@
+* {
+	-fx-primary-color: #415FA9FF;
+	-fx-secondary-color: #4B6EAF;
+	-fx-grey-color: #b9b9b9;
+
+	-fx-focus-color: -fx-secondary-color;
+}
+
+.text-field {
+	-fx-accent: -fx-primary-color;
+	-fx-background-color: -fx-grey-color, white;
+	-fx-background-insets: 0, 0 0 1 0;
+	-fx-background-radius: 0;
+}
+.text-field:focused {
+	-fx-background-color: -fx-primary-color, white;
+}
+
+.jfx-combo-box {
+	-fx-background-color:  -fx-primary-color;
+}
+
+.jfx-combo-box .label {
+	-fx-background-color:  -fx-primary-color;
+	-fx-text-fill: white;
+}
+
+.table-view{
+ -fx-alignment: center;
+ -fx-background-color: white;
+}
+.table-view .column-header {
+    -fx-background-color: -fx-primary-color;
+}
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+.table-view .column-header-background{
+    -fx-background-color: white;
+}
+
+#combo {
+	-fx-background-color:  -fx-primary-color;
+	-fx-text-fill: white;
+}
+
+#BTN {
+    -fx-text-fill: white;
+    -fx-background-color : -fx-primary-color;
+}
+#BTNX{
+    -fx-border-color: -fx-primary-color;
+}

@@ -2,7 +2,6 @@ package com.bank.bank_of_lebanon;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -29,15 +28,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Stack;
 
 public class BankOfLebanonEmployeeApplication extends Application {
 
+    //Get User ID Through textField and initialize it to this Variable
     private int ID;
     ClientsDatabaseManip cdm = new ClientsDatabaseManip();
     AccountsDatabaseManip adm = new AccountsDatabaseManip();
 
-    EmployeesDatabaseManip edm = new EmployeesDatabaseManip();
     ObservableList<Client> clients_observable = cdm.getClientList();
     ObservableList<Account> accounts_observable = adm.getAccountList();
 
@@ -48,10 +46,6 @@ public class BankOfLebanonEmployeeApplication extends Application {
     //CheckAccounts Pane and Scene
     BorderPane CheckAccountsBorderPane = new BorderPane();
     EmployeeInterface CheckAccountsInterface = new EmployeeInterface(CheckAccountsBorderPane,1290,720);
-
-    //CheckTransactions Pane and Scene
-    BorderPane CheckTransactionsBorderPane = new BorderPane();
-    EmployeeInterface CheckTransactionsInterface = new EmployeeInterface(CheckTransactionsBorderPane,1290,720);
 
     //AddClient Pane and Scene
     BorderPane AddClientBorderPane = new BorderPane();
@@ -202,470 +196,76 @@ public class BankOfLebanonEmployeeApplication extends Application {
         return Frame;
     }
 
-    //Stages Methods ( Errors / Success Operations )
-    private void AddedClientStage(Stage stage) {
-        Stage ClientAddedStage = new Stage();
-
-        BorderPane pane = new BorderPane();
-        VBox Vbox = new VBox();
-        Vbox.setSpacing(30);
-        Vbox.setPadding(new Insets(10,10,10,10));
-        Vbox.setAlignment(Pos.CENTER);
-        Button btn = new Button(" OK ");
-        btn.setAlignment(Pos.BOTTOM_CENTER);
-
-        btn.setTextFill(Color.WHITE);
-
-        btn.setId("BTN");
-        style.ChangeButtonColor(btn,"BTN","BTN2");
-
-        Text text = new Text("CLIENT ADDED SUCCESSFULLY !");
-        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
-        text.setFill(Color.rgb(65,95,169));
-
-        Vbox.getChildren().addAll(text,btn);
-        pane.setCenter(Vbox);
-
-        Scene AddedClientScene = new Scene(pane, 300, 150);
-        ClientAddedStage.initOwner(stage);
-        // Set position of second window, related to primary window.
-        ClientAddedStage.initModality(Modality.WINDOW_MODAL);
-        ClientAddedStage.setX(1280 / 2.0);
-        ClientAddedStage.setY(720 / 2.0);
-        ClientAddedStage.setScene(AddedClientScene);
-        ClientAddedStage.show();
-        ClientAddedStage.setTitle("Client Added");
-        ClientAddedStage.getIcons().add(new Image("C:\\Users\\User\\Desktop\\Programing\\Java\\JavaFx\\project\\Bank Of Lebanon\\src\\main\\images\\BankLogo.png"));
-
-        btn.setOnAction(e->{
-            ClientAddedStage.close();
-        });
-
-        AddedClientScene.getStylesheets().addAll("style1.css","style2.css");
-    }
-    private void AddedMoneyStage(Stage stage,String Text, double width) {
-        Stage ClientAddedStage = new Stage();
-
-        BorderPane pane = new BorderPane();
-        VBox Vbox = new VBox();
-        Vbox.setSpacing(30);
-        Vbox.setPadding(new Insets(10,10,10,10));
-        Vbox.setAlignment(Pos.CENTER);
-        Button btn = new Button(" OK ");
-        btn.setAlignment(Pos.BOTTOM_CENTER);
-
-        btn.setTextFill(Color.WHITE);
-
-        btn.setId("BTN");
-        style.ChangeButtonColor(btn,"BTN","BTN2");
-
-        Text text = new Text(Text);
-        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
-        text.setFill(Color.rgb(65,95,169));
-
-        Vbox.getChildren().addAll(text,btn);
-        pane.setCenter(Vbox);
-
-        Scene AddedClientScene = new Scene(pane, width, 150);
-        ClientAddedStage.initOwner(stage);
-        // Set position of second window, related to primary window.
-        ClientAddedStage.initModality(Modality.WINDOW_MODAL);
-        ClientAddedStage.setX(1280 / 2.0);
-        ClientAddedStage.setY(720 / 2.0);
-        ClientAddedStage.setScene(AddedClientScene);
-        ClientAddedStage.show();
-        ClientAddedStage.setTitle("Updated Balance");
-        ClientAddedStage.getIcons().add(new Image("C:\\Users\\User\\Desktop\\Programing\\Java\\JavaFx\\project\\Bank Of Lebanon\\src\\main\\images\\BankLogo.png"));
-
-        btn.setOnAction(e->{
-            ClientAddedStage.close();
-        });
-
-        AddedClientScene.getStylesheets().addAll("style1.css","style2.css");
-    }
-    private void ClientHasStage(Stage stage,String Type) {
-        Stage ClientHasStage = new Stage();
-
-        BorderPane pane = new BorderPane();
-        VBox Vbox = new VBox();
-        Vbox.setSpacing(30);
-        Vbox.setPadding(new Insets(10,10,10,10));
-        Vbox.setAlignment(Pos.CENTER);
-        Button btn = new Button(" OK ");
-        btn.setAlignment(Pos.BOTTOM_CENTER);
-
-        btn.setTextFill(Color.WHITE);
-
-        btn.setId("BTN");
-        style.ChangeButtonColor(btn,"BTN","BTN2");
-
-        Text text = new Text("CLIENT ALREADY HAS " + Type + " !");
-        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
-        text.setFill(Color.rgb(65,95,169));
-
-        Vbox.getChildren().addAll(text,btn);
-        pane.setCenter(Vbox);
-
-        Scene HasClientScene = new Scene(pane, 300, 150);
-        ClientHasStage.initOwner(stage);
-        // Set position of second window, related to primary window.
-        ClientHasStage.initModality(Modality.WINDOW_MODAL);
-        ClientHasStage.setX(1280 / 2.0);
-        ClientHasStage.setY(720 / 2.0);
-        ClientHasStage.setScene(HasClientScene);
-        ClientHasStage.show();
-        ClientHasStage.setTitle("Client Error");
-        ClientHasStage.getIcons().add(new Image("C:\\Users\\User\\Desktop\\Programing\\Java\\JavaFx\\project\\Bank Of Lebanon\\src\\main\\images\\BankLogo.png"));
-
-        btn.setOnAction(e->{
-            ClientHasStage.close();
-        });
-
-        HasClientScene.getStylesheets().addAll("style1.css","style2.css");
-    }
-    private void ErrorClientStage(Stage stage) {
-        Stage ErrorStage = new Stage();
-
-        BorderPane pane = new BorderPane();
-        VBox Vbox = new VBox();
-        Vbox.setSpacing(30);
-        Vbox.setPadding(new Insets(10,10,10,10));
-        Vbox.setAlignment(Pos.CENTER);
-        Button btn = new Button(" OK ");
-        btn.setAlignment(Pos.BOTTOM_CENTER);
-
-        btn.setTextFill(Color.WHITE);
-
-        btn.setId("BTN");
-        style.ChangeButtonColor(btn,"BTN","BTN2");
-
-        Text text = new Text("ERROR PLEASE CHECK ALL FIELDS !");
-        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
-        text.setFill(Color.rgb(65,95,169));
-
-        Vbox.getChildren().addAll(text,btn);
-        pane.setCenter(Vbox);
-
-        btn.setOnAction(e->{
-            ErrorStage.close();
-        });
-        Scene ErrorScene = new Scene(pane, 300, 150);
-        ErrorStage.initOwner(stage);
-        // Set position of second window, related to primary window.
-        ErrorStage.initModality(Modality.WINDOW_MODAL);
-        ErrorStage.setX(1280 / 2.0);
-        ErrorStage.setY(720 / 2.0);
-        ErrorStage.setScene(ErrorScene);
-        ErrorStage.show();
-        ErrorStage.setTitle("Error");
-        ErrorStage.getIcons().add(new Image("C:\\Users\\User\\Desktop\\Programing\\Java\\JavaFx\\project\\Bank Of Lebanon\\src\\main\\images\\BankLogo.png"));
-        ErrorScene.getStylesheets().addAll("style1.css","style2.css");
-
-    }
-
-    private void ErrorEmployeeStage(Stage stage) {
-        Stage ErrorStage = new Stage();
-
-        BorderPane pane = new BorderPane();
-        VBox Vbox = new VBox();
-        Vbox.setSpacing(30);
-        Vbox.setPadding(new Insets(10,10,10,10));
-        Vbox.setAlignment(Pos.CENTER);
-        Button btn = new Button(" OK ");
-        btn.setAlignment(Pos.BOTTOM_CENTER);
-
-        btn.setTextFill(Color.WHITE);
-
-        btn.setId("BTN");
-        style.ChangeButtonColor(btn,"BTN","BTN2");
-
-        Text text = new Text("ERROR EITHER PASSWORD OR ID ARE INCORRECT !");
-        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
-        text.setFill(Color.rgb(65,95,169));
-
-        Vbox.getChildren().addAll(text,btn);
-        pane.setCenter(Vbox);
-
-        btn.setOnAction(e->{
-            ErrorStage.close();
-        });
-        Scene ErrorScene = new Scene(pane, 450, 150);
-        ErrorStage.initOwner(stage);
-        // Set position of second window, related to primary window.
-        ErrorStage.initModality(Modality.WINDOW_MODAL);
-        ErrorStage.setX(1280 / 2.0);
-        ErrorStage.setY(720 / 2.0);
-        ErrorStage.setScene(ErrorScene);
-        ErrorStage.show();
-        ErrorStage.setTitle("Error");
-        ErrorStage.getIcons().add(new Image("C:\\Users\\User\\Desktop\\Programing\\Java\\JavaFx\\project\\Bank Of Lebanon\\src\\main\\images\\BankLogo.png"));
-        ErrorScene.getStylesheets().addAll("style1.css","style2.css");
-
-    }
-    private void ErrorNotFoundStage(Stage stage) {
-        Stage ErrorStage = new Stage();
-
-        BorderPane pane = new BorderPane();
-        VBox Vbox = new VBox();
-        Vbox.setSpacing(30);
-        Vbox.setPadding(new Insets(10,10,10,10));
-        Vbox.setAlignment(Pos.CENTER);
-        Button btn = new Button(" OK ");
-        btn.setAlignment(Pos.BOTTOM_CENTER);
-
-        btn.setTextFill(Color.WHITE);
-
-        btn.setId("BTN");
-        style.ChangeButtonColor(btn,"BTN","BTN2");
-
-        Text text = new Text("ERROR ID NOT FOUND !");
-        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
-        text.setFill(Color.rgb(65,95,169));
-
-        Vbox.getChildren().addAll(text,btn);
-        pane.setCenter(Vbox);
-
-        btn.setOnAction(e->{
-            ErrorStage.close();
-        });
-        Scene ErrorScene = new Scene(pane, 300, 150);
-        ErrorStage.initOwner(stage);
-        // Set position of second window, related to primary window.
-        ErrorStage.initModality(Modality.WINDOW_MODAL);
-        ErrorStage.setX(1280 / 2.0);
-        ErrorStage.setY(720 / 2.0);
-        ErrorStage.setScene(ErrorScene);
-        ErrorStage.show();
-        ErrorStage.setTitle("Not Found");
-        ErrorStage.getIcons().add(new Image("C:\\Users\\User\\Desktop\\Programing\\Java\\JavaFx\\project\\Bank Of Lebanon\\src\\main\\images\\BankLogo.png"));
-        ErrorScene.getStylesheets().addAll("style1.css","style2.css");
-
-    }
-    private void ErrorNotCalculatedStage(Stage stage) {
-        Stage ErrorStage = new Stage();
-
-        BorderPane pane = new BorderPane();
-        VBox Vbox = new VBox();
-        Vbox.setSpacing(30);
-        Vbox.setPadding(new Insets(10,10,10,10));
-        Vbox.setAlignment(Pos.CENTER);
-        Button btn = new Button(" OK ");
-        btn.setAlignment(Pos.BOTTOM_CENTER);
-
-        btn.setTextFill(Color.WHITE);
-
-        btn.setId("BTN");
-        style.ChangeButtonColor(btn,"BTN","BTN2");
-
-        Text text = new Text("PLEASE CALCULATE LOAN !");
-        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
-        text.setFill(Color.rgb(65,95,169));
-
-        Vbox.getChildren().addAll(text,btn);
-        pane.setCenter(Vbox);
-
-        btn.setOnAction(e->{
-            ErrorStage.close();
-        });
-        Scene ErrorScene = new Scene(pane, 300, 150);
-        ErrorStage.initOwner(stage);
-        // Set position of second window, related to primary window.
-        ErrorStage.initModality(Modality.WINDOW_MODAL);
-        ErrorStage.setX(1280 / 2.0);
-        ErrorStage.setY(720 / 2.0);
-        ErrorStage.setScene(ErrorScene);
-        ErrorStage.show();
-        ErrorStage.setTitle("Not Calculated");
-        ErrorStage.getIcons().add(new Image("C:\\Users\\User\\Desktop\\Programing\\Java\\JavaFx\\project\\Bank Of Lebanon\\src\\main\\images\\BankLogo.png"));
-        ErrorScene.getStylesheets().addAll("style1.css","style2.css");
-
-    }
-    private void DataBaseConnectivity(Stage stage){
-        Stage DatabaseConnectivity = new Stage();
-
-        ClientsDatabaseManip db = new ClientsDatabaseManip();
-        boolean DbConnected = db.connect();
-        BorderPane pane = new BorderPane();
-
-        VBox Vbox = new VBox();
-        Vbox.setSpacing(30);
-        Vbox.setPadding(new Insets(10, 10, 10, 10));
-        Vbox.setAlignment(Pos.CENTER);
-        Button btn = new Button(" OK ");
-        btn.setAlignment(Pos.BOTTOM_CENTER);
-
-        Text text = new Text("ERROR PLEASE CHECK ALL FIELDS !");
-        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12));
-        text.setFill(Color.rgb(65, 95, 169));
-
-        btn.setTextFill(Color.WHITE);
-
-        Vbox.getChildren().addAll(text, btn);
-        pane.setCenter(Vbox);
-
-        btn.setOnAction(e -> {
-            DatabaseConnectivity.close();
-        });
-
-        btn.setId("BTN");
-        style.ChangeButtonColor(btn, "BTN", "BTN2");
-
-        if(DbConnected) {
-            text.setText("CONNECTION AND DATABASE ARE SECURE !");
-        }else
-            text.setText("CONNECTION FAILED !");
-
-        Scene DataScene = new Scene(pane, 350, 150);
-        DatabaseConnectivity.initOwner(stage);
-        // Set position of second window, related to primary window.
-        DatabaseConnectivity.initModality(Modality.WINDOW_MODAL);
-        DatabaseConnectivity.setX(1280 / 2.0);
-        DatabaseConnectivity.setY(720 / 2.0);
-        DatabaseConnectivity.setScene(DataScene);
-        DatabaseConnectivity.show();
-        DatabaseConnectivity.setTitle("Database Connection");
-        DatabaseConnectivity.getIcons().add(new Image("C:\\Users\\User\\Desktop\\Programing\\Java\\JavaFx\\project\\Bank Of Lebanon\\src\\main\\images\\BankLogo.png"));
-        DataScene.getStylesheets().addAll("style1.css", "style2.css");
-
-    }
-    private void ManageClientStage(Stage stage) {
-        Stage ClientAddedStage = new Stage();
-
-        StackPane pane = new StackPane();
-        pane.setAlignment(Pos.CENTER);
-        pane.setPadding(new Insets(10,10,10,10));
-
-        GridPane gridPane = new GridPane();
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(10,10,10,10));
-
-        TextField EmpId = new TextField();
-        TextField Email = new TextField();
-        TextField Password = new TextField();
-        TextField Salary = new TextField();
-
-        EmpId.setEditable(false);
-        Email.setEditable(false);
-        Password.setEditable(false);
-        Salary.setEditable(false);
-
-        Label EmpIdL = new Label("Employee ID");
-        Label EmailL = new Label("Email");
-        Label PasswordL = new Label("Password");
-        Label SalaryL = new Label("Salary");
-
-        Text TEXT = new Text("ACCOUNT INFO");
-        TEXT.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
-        TEXT.setFill(Color.rgb(65,95,169));
-
-        gridPane.add(TEXT,0,0);
-
-        gridPane.add(EmpIdL,0,1);
-        gridPane.add(EmpId,1,1);
-
-        gridPane.add(EmailL, 0, 2);
-        gridPane.add(Email, 1, 2);
-
-        gridPane.add(PasswordL, 0, 3);
-        gridPane.add(Password, 1, 3);
-
-        gridPane.add(SalaryL, 0, 4);
-        gridPane.add(Salary, 1, 4);
-
-        pane.getChildren().addAll(Frame(450,450),gridPane);
-
-        Scene AddedClientScene = new Scene(pane, 500, 500);
-        ClientAddedStage.initOwner(stage);
-
-        // Set position of second window, related to primary window.
-        ClientAddedStage.initModality(Modality.WINDOW_MODAL);
-        ClientAddedStage.setX(1280 / 2.0);
-        ClientAddedStage.setY(720 / 2.0);
-        ClientAddedStage.setScene(AddedClientScene);
-        ClientAddedStage.show();
-        ClientAddedStage.setTitle("Account Info");
-        ClientAddedStage.getIcons().add(new Image("C:\\Users\\User\\Desktop\\Programing\\Java\\JavaFx\\project\\Bank Of Lebanon\\src\\main\\images\\BankLogo.png"));
-
-        AddedClientScene.getStylesheets().addAll("style1.css","style2.css");
-    }
-
     //Money Related Panes and Stages ( For Account Class )
     private Pane ClientMoneyPane(Stage stage){
+        //Declare Nodes andPanes
         BorderPane ClientMoneyPane = new BorderPane();
         GridPane ClientMoneyGridPane = new GridPane();
+        HBox ClientMoneyHBox = new HBox();
+        VBox vbox = new VBox();
+        HBox ButtonsHBox = new HBox();
+        StackPane ButtonsStackPane = new StackPane();
+        TextField SearchField = ManageClientTextField("Account Number");
+        TextField AccountNb = ManageClientTextField("Account Number");
+        Label SearchL = ManageClientLabel("Search Account");
+        Label AccountL = ManageClientLabel("Account ID");
 
-        //GridPane Characteristics
         ClientMoneyGridPane.setVgap(20);
         ClientMoneyGridPane.setHgap(20);
         ClientMoneyGridPane.setAlignment(Pos.CENTER);
 
-        HBox ClientMoneyHBox = new HBox();
         ClientMoneyHBox.setAlignment(Pos.CENTER);
         ClientMoneyHBox.setSpacing(15);
 
         Button Loan = ManageClientButton("Loan",200,250);
         Loan.setTextFill(Color.WHITE);
-        Loan.setId("BTN");
-        style.ChangeButtonColor(Loan,"BTN","BTN2");
+        Loan.setId("BTN");//SET CSS ID
+        style.ChangeButtonColor(Loan,"BTN","BTN2");//To change button color and hover
 
         Button Interest = ManageClientButton("Interest",200,250);
         Interest.setTextFill(Color.WHITE);
-        Interest.setId("BTN");
-        style.ChangeButtonColor(Interest,"BTN","BTN2");
+        Interest.setId("BTN");//SET CSS ID
+        style.ChangeButtonColor(Interest,"BTN","BTN2");//To change button color and hover
 
         Button Deposit = ManageClientButton("Deposit",200,250);
         Deposit.setTextFill(Color.WHITE);
-        Deposit.setId("BTN");
-        style.ChangeButtonColor(Deposit,"BTN","BTN2");
+        Deposit.setId("BTN");//SET CSS ID
+        style.ChangeButtonColor(Deposit,"BTN","BTN2");//To change button color and hover
 
         Button Withdraw = ManageClientButton("Withdraw",200,250);
         Withdraw.setTextFill(Color.WHITE);
-        Withdraw.setId("BTN");
-        style.ChangeButtonColor(Withdraw,"BTN","BTN2");
-
-        TextField SearchField = new TextField();
-        SearchField.setPrefWidth(200);
-        SearchField.setPromptText("Account Number");
-        Label SearchL = new Label("Search Account");
-        TextField AccountNb = new TextField();
-        Label AccountL = new Label("Account ID");
-        AccountNb.setPromptText("Account Number");
-        AccountNb.setEditable(false);
+        Withdraw.setId("BTN");//SET CSS ID
+        style.ChangeButtonColor(Withdraw,"BTN","BTN2");//To change button color and hover
 
         Button btSearchClient = new Button("Search Account");
         btSearchClient.setTextFill(Color.WHITE);
         btSearchClient.setId("BTN");
         style.ChangeButtonColor(btSearchClient,"BTN","BTN2");
 
-        btSearchClient.setOnAction(e->{
-            try {
-                if(adm.isIdExist(GeneralUtil.GetInt(SearchField))) {
-                    AccountNb.setText(SearchField.getText());
-                    ID = GeneralUtil.GetInt(SearchField);
-                }
-                if(!adm.isIdExist(GeneralUtil.GetInt(SearchField))){
-                    ErrorNotFoundStage(stage);
-                    AccountNb.clear();
-                    ID = 0;
-                }
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
         Button Back = ManageClientButton(" Back ",30,15);
         Back.setTextFill(Color.WHITE);
         Back.setId("BTN");
         style.ChangeButtonColor(Back,"BTN","BTN2");
 
-        HBox ButtonsHBox = new HBox();
-        ButtonsHBox.getChildren().addAll(Back,SearchL,SearchField,btSearchClient,AccountL, AccountNb);
-        ButtonsHBox.setAlignment(Pos.CENTER);
-        ButtonsHBox.setPadding(new Insets(25,25,25,25));
-        ButtonsHBox.setSpacing(25);
+        SearchField.setPrefWidth(200);
+        AccountNb.setEditable(false);
 
+        //Button functions
+        btSearchClient.setOnAction(e->{
+            try { // Get the ID to be used in the loan and interest and withdraw and deposit scenes
+                if(adm.isIdExist(GeneralUtil.GetInt(SearchField))) { // If ID is found in database
+                    AccountNb.setText(SearchField.getText());
+                    ID = GeneralUtil.GetInt(SearchField); // Assign the Client's ID from the TextField value
+                }
+                if(!adm.isIdExist(GeneralUtil.GetInt(SearchField))){ // If ID is not found in database
+                    EmployeeInterface.ErrorNotFoundStage(stage); // Call the Error Stage
+                    AccountNb.clear(); // Clear the TextField
+                    ID = 0; // Assign 0 to the ID
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         Loan.setOnAction(e->{
             try {
                 Loan(stage);
@@ -699,10 +299,13 @@ public class BankOfLebanonEmployeeApplication extends Application {
             AccountNb.clear();
         });
 
-        VBox vbox = new VBox();
+        ButtonsHBox.getChildren().addAll(Back,SearchL,SearchField,btSearchClient,AccountL, AccountNb);
+        ButtonsHBox.setAlignment(Pos.CENTER);
+        ButtonsHBox.setPadding(new Insets(25,25,25,25));
+        ButtonsHBox.setSpacing(25);
+
         vbox.setAlignment(Pos.CENTER);
 
-        StackPane ButtonsStackPane = new StackPane();
         ButtonsStackPane.setPadding(new Insets(15,15,15,15));
         ButtonsStackPane.getChildren().addAll(Frame(50,850),ButtonsHBox);
         ButtonsStackPane.setAlignment(Pos.CENTER);
@@ -710,19 +313,17 @@ public class BankOfLebanonEmployeeApplication extends Application {
         ClientMoneyHBox.getChildren().addAll(Loan,Interest,Withdraw,Deposit);
         vbox.getChildren().addAll(ButtonsStackPane, ClientMoneyHBox);
         ClientMoneyPane.setCenter(vbox);
-
         return ClientMoneyPane;
     }
     private void Loan(Stage stage) throws SQLException, ClassNotFoundException {
         Stage Loan = new Stage();
-
         BorderPane pane = new BorderPane();
         StackPane LoanStackPane = new StackPane();
 
+        Loan loan = new Loan();
+
         Scene YearlyLoanScene = new Scene(pane, 720, 650);
         YearlyLoanScene.getStylesheets().addAll("Style1.css", "Style2.css");
-
-        Loan.initOwner(stage);
 
         Text YearlyLoanText = new Text("YEARLY LOAN");
         YearlyLoanText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
@@ -738,39 +339,37 @@ public class BankOfLebanonEmployeeApplication extends Application {
         Button btCalculate = new Button("Calculate Loan Amount");
 
         btCalculate.setTextFill(Color.WHITE);
-        btCalculate.setId("BTN");
+        btCalculate.setId("BTN");//SET CSS ID
         style.ChangeButtonColor(btCalculate,"BTN","BTN2");
 
         Button btAddToClient = new Button("Add Loan To Client");
 
         btAddToClient.setTextFill(Color.WHITE);
-        btAddToClient.setId("BTN");
+        btAddToClient.setId("BTN");//SET CSS ID
         style.ChangeButtonColor(btAddToClient,"BTN","BTN2");
 
-        Loan loan = new Loan();
+        //Buttons functions
         btCalculate.setOnAction(e->{
+            //Calculate loan
             loan.calculateLoan(tfYears,tfInterest,tfLoanAmount,tfInterestValue);
         });
-        Account account = new Account();
-
         btAddToClient.setOnAction(e->{
             try {
                 if(adm.GetBoolean("isLoan", ID)) {
-                    ClientHasStage(stage, "LOAN");
+                    EmployeeInterface.ClientHasStage(stage, "LOAN");
                 } else{
                     try{
                         double LoanAmount = Double.parseDouble(tfInterestValue.getText());
-                        if(Double.parseDouble(tfInterestValue.getText()) == 0 || tfInterestValue.getText().isEmpty()) {
-                            ErrorNotCalculatedStage(stage);
+                        if(Double.parseDouble(tfInterestValue.getText()) == 0 || tfInterestValue.getText().isEmpty()) { //if TextFields are empty
+                            EmployeeInterface.ErrorNotCalculatedStage(stage);
                         }else{
+                            //Update values to the database
                             adm.UpdateDoubleAccount("LoanAmount",LoanAmount,ID);
                             adm.UpdateBooleanAccount("isLoan",true,ID);
-                            AddedMoneyStage(stage,"ADDED LOAN SUCCESSFULLY !",300);
-                            account.setIsLoan(true);
-                            account.setLoan_amount(LoanAmount);
+                            EmployeeInterface.AddedMoneyStage(stage,"ADDED LOAN SUCCESSFULLY !",300);
                         }
                     }catch (NumberFormatException nfe){
-                       ErrorNotFoundStage(stage);
+                        EmployeeInterface.ErrorNotFoundStage(stage);
                     }
                 }
             } catch (SQLException ex) {
@@ -812,19 +411,18 @@ public class BankOfLebanonEmployeeApplication extends Application {
         Loan.setX(1280 / 3.1);
         Loan.setY(30);
         Loan.setScene(YearlyLoanScene);
+        Loan.initOwner(stage);
         Loan.show();
         Loan.setTitle("Client Loan");
     }
     private void Interest(Stage stage) throws SQLException, ClassNotFoundException{
+        //Declare Nodes and Panes
         Stage Interest = new Stage();
-
         BorderPane pane = new BorderPane();
         StackPane InterestStackPane = new StackPane();
 
         Scene YearlyInterestScene = new Scene(pane, 720, 650);
         YearlyInterestScene.getStylesheets().addAll("Style1.css", "Style2.css");
-
-        Interest.initOwner(stage);
 
         Text YearlyInterestText = new Text("YEARLY INTEREST");
         YearlyInterestText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
@@ -885,30 +483,31 @@ public class BankOfLebanonEmployeeApplication extends Application {
         Interest interest = new Interest();
 
         btCalculate.setOnAction(e->{
+            //Calculate Interest
             interest.calculateYInterest(tfYears,tfInterest,tfInterestAmount,tfInterestValue);
         });
 
         System.out.println(ID);
-        //Add to database
+        //Buttons Declaration
         btAddToClient.setOnAction(e->{
             try {
-                if(adm.GetBoolean("isInterest", ID)) {
-                    ClientHasStage(stage, "INTEREST");
+                if(adm.GetBoolean("isInterest", ID)) { //If Client already has Interest
+                    EmployeeInterface.ClientHasStage(stage, "INTEREST");
                 }else{
                         double InterestAmount = Double.parseDouble(tfInterestValue.getText());
-                        if(Double.parseDouble(tfInterestValue.getText()) == 0 || tfInterestValue.getText().isEmpty()) {
-                            ErrorNotCalculatedStage(stage);
+                        if(Double.parseDouble(tfInterestValue.getText()) == 0 || tfInterestValue.getText().isEmpty()) { // If Text fields are empty
+                            EmployeeInterface.ErrorNotCalculatedStage(stage);
                         }else{
+                            //Update values to the database
                             adm.UpdateDoubleAccount("InterestAmount",InterestAmount,ID);
                             adm.UpdateBooleanAccount("isInterest",true,ID);
-                            AddedMoneyStage(stage,"ADDED INTEREST SUCCESSFULLY !",300);
+                            EmployeeInterface.AddedMoneyStage(stage,"ADDED INTEREST SUCCESSFULLY !",300);
                         }
                 }
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
         });
-
         btNextScene.setOnAction(e->{
             try {
                 Interest.setScene(InterestMonthly(Interest,YearlyInterestScene));
@@ -925,19 +524,126 @@ public class BankOfLebanonEmployeeApplication extends Application {
         Interest.setX(1280 / 3.1);
         Interest.setY(30);
         Interest.setScene(YearlyInterestScene);
+        Interest.initOwner(stage);
         Interest.show();
         Interest.setTitle("Client Interest");
     }
-    private void Deposit(Stage stage) throws SQLException, ClassNotFoundException {
-        Stage Deposit = new Stage();
+    private Scene InterestMonthly(Stage Interest, Scene YearlyInterestScene)throws SQLException, ClassNotFoundException{
+        //Declare Panes and Nodes
+        BorderPane pane = new BorderPane();
+        Scene MonthlyInterestScene = new Scene(pane, 720, 650);
+        StackPane InterestStackPane = new StackPane();
+        Interest interest = new Interest();
+        Text MonthlyInterestText = new Text("MONTHLY INTEREST");
 
+        MonthlyInterestText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        MonthlyInterestText.setFill(Color.rgb(65,95,169));
+
+        //Declare TextFields
+        TextField tfYears = ManageClientTextField("Number of years");
+        TextField tfInterest = ManageClientTextField("Interest rate");
+        TextField tfInterestAmount = ManageClientTextField("Interest Amount");
+        TextField tfInterestValue = ManageClientTextField("Total Amount");
+
+        Button btCalculate = new Button("Calculate Interest Amount");
+        btCalculate.setTextFill(Color.WHITE);
+        btCalculate.setId("BTN");//SET CSS ID
+        style.ChangeButtonColor(btCalculate,"BTN","BTN2");
+
+        Button btAddToClient = new Button("Add Interest To Client");
+        btAddToClient.setTextFill(Color.WHITE);
+        btAddToClient.setId("BTN");//SET CSS ID
+        style.ChangeButtonColor(btAddToClient,"BTN","BTN2");
+
+        Button btNextScene = new Button("Yearly Interest");
+        btNextScene.setTextFill(Color.WHITE);
+        btNextScene.setId("BTN");//SET CSS ID
+        style.ChangeButtonColor(btNextScene,"BTN","BTN2");
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(5);
+        gridPane.setVgap(45);
+
+        TextField AccountNB = ManageClientTextField("Account ID");
+        AccountNB.setText(Integer.toString(ID)); // Set the ID
+
+        gridPane.add(MonthlyInterestText,0,0);
+        gridPane.add(new Label("Account ID"),0,1);
+        gridPane.add(AccountNB,1,1);
+        gridPane.add(new Label("Years"), 0, 2);
+        gridPane.add(tfYears, 1, 2);
+        gridPane.add(new Label("Interest Rate"), 0, 3);
+        gridPane.add(tfInterest, 1, 3);
+        gridPane.add(new Label("Interest Amount"), 0, 4);
+        gridPane.add(tfInterestAmount, 1, 4);
+        gridPane.add(new Label("Total Payment"), 0, 5);
+        gridPane.add(tfInterestValue, 1, 5);
+        gridPane.add(btCalculate, 0, 6);
+        gridPane.add(btAddToClient, 1,6);
+        gridPane.add(btNextScene, 2,6);
+
+        gridPane.setAlignment(Pos.CENTER);
+        tfYears.setAlignment(Pos.BOTTOM_LEFT);
+        tfInterest.setAlignment(Pos.BOTTOM_LEFT);
+        tfInterestAmount.setAlignment(Pos.BOTTOM_LEFT);
+        tfInterestValue.setAlignment(Pos.BOTTOM_LEFT);
+        tfInterestValue.setEditable(false);
+        AccountNB.setEditable(false);
+
+        InterestStackPane.getChildren().addAll(Frame(500,530), gridPane);
+        pane.setCenter(InterestStackPane);
+
+        //Buttons functions
+        btCalculate.setOnAction(e->{
+            //calculate Interest
+            interest.calculateMInterest(tfYears,tfInterest,tfInterestAmount,tfInterestValue);
+        });
+        btAddToClient.setOnAction(e->{
+            try {
+                if(adm.GetBoolean("isInterest", ID)) {
+                    EmployeeInterface.ClientHasStage(Interest, "INTEREST");
+                } else{
+                    try{
+                        double InterestAmount = Double.parseDouble(tfInterestValue.getText());
+                        //if User did not Calculate Interest
+                        if(Double.parseDouble(tfInterestValue.getText()) == 0 || tfInterestValue.getText().isEmpty()) {
+                            EmployeeInterface.ErrorNotCalculatedStage(Interest);
+                        }else{
+                            //Add Values to the database through adm object
+                            adm.UpdateDoubleAccount("InterestAmount",InterestAmount,ID);
+                            adm.UpdateBooleanAccount("isInterest",true,ID);
+                            EmployeeInterface.AddedMoneyStage(Interest,"ADDED INTEREST SUCCESSFULLY !",300);
+                        }
+                    }catch (NumberFormatException nfe){
+                        EmployeeInterface.ErrorNotFoundStage(Interest);
+                    }
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        btNextScene.setOnAction(e->{
+            //Call Interest Interface
+            Interest.setScene(YearlyInterestScene);
+        });
+
+        // Set position of second window, related to primary window.
+        Interest.setX(1280 / 3.1);
+        Interest.setY(30);
+        Interest.setScene(YearlyInterestScene);
+        Interest.show();
+        Interest.setTitle("Client Interest");
+        MonthlyInterestScene.getStylesheets().addAll("Style1.css", "Style2.css");
+        return MonthlyInterestScene;
+    }
+    private void Deposit(Stage stage) throws SQLException, ClassNotFoundException {
+        //Declare Nodes and Panes
+        Stage Deposit = new Stage();
         BorderPane pane = new BorderPane();
         StackPane DepositStackPane = new StackPane();
 
         Scene DepositScene = new Scene(pane, 720, 650);
         DepositScene.getStylesheets().addAll("Style1.css", "Style2.css");
-
-        Deposit.initOwner(stage);
 
         TextField AccountNB = ManageClientTextField("Account ID");
         AccountNB.setText(Integer.toString(ID));
@@ -970,7 +676,7 @@ public class BankOfLebanonEmployeeApplication extends Application {
                 double Amount = Double.parseDouble(tfAmount.getText());
                 double AmountAfterDeposit = adm.GetDouble("money" ,ID) + Amount;
                 adm.UpdateDoubleAccount("money" , AmountAfterDeposit ,ID);
-                AddedMoneyStage(stage, "ADDED " + Amount + "$ SUCCESSFULLY",300);
+                EmployeeInterface.AddedMoneyStage(stage, "ADDED " + Amount + "$ SUCCESSFULLY",300);
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -979,8 +685,6 @@ public class BankOfLebanonEmployeeApplication extends Application {
         gridPane.setAlignment(Pos.CENTER);
         tfTotalAfterDeposition.setEditable(false);
 
-        Account acct = new Account();
-
         DepositStackPane.getChildren().addAll(Frame(400,400), gridPane);
         pane.setCenter(DepositStackPane);
 
@@ -988,21 +692,19 @@ public class BankOfLebanonEmployeeApplication extends Application {
         Deposit.initModality(Modality.WINDOW_MODAL);
         Deposit.setX(1280 / 3.1);
         Deposit.setY(30);
+        Deposit.initOwner(stage);
         Deposit.setScene(DepositScene);
         Deposit.show();
         Deposit.setTitle("Client Deposit");
-
     }
     private void Withdraw(Stage stage)throws SQLException, ClassNotFoundException{
+        //Declare Nodes and Panes
         Stage Withdraw = new Stage();
-
         BorderPane pane = new BorderPane();
         StackPane WithdrawStackPane = new StackPane();
 
         Scene WithdrawScene = new Scene(pane, 720, 650);
         WithdrawScene.getStylesheets().addAll("Style1.css", "Style2.css");
-
-        Withdraw.initOwner(stage);
 
         Text WithdrawText = new Text("WITHDRAW");
         WithdrawText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
@@ -1010,8 +712,8 @@ public class BankOfLebanonEmployeeApplication extends Application {
 
         TextField tfAmount = ManageClientTextField("Amount in dollars");
         TextField tfTotalAfterWithdrawion = ManageClientTextField("Total");
-        Button Withdrawbt = new Button("Withdraw");
 
+        Button Withdrawbt = new Button("Withdraw");
         Withdrawbt.setTextFill(Color.WHITE);
         Withdrawbt.setId("BTN");
         style.ChangeButtonColor(Withdrawbt,"BTN","BTN2");
@@ -1033,17 +735,15 @@ public class BankOfLebanonEmployeeApplication extends Application {
         gridPane.setAlignment(Pos.CENTER);
         tfTotalAfterWithdrawion.setEditable(false);
 
-        Account acct = new Account();
-
         Withdrawbt.setOnAction(e->{
             try {
                 double Amount = Double.parseDouble(tfAmount.getText());
-                if(Amount > adm.GetDouble("money" ,ID)){
-                    AddedMoneyStage(stage,"CANNOT WITHDRAW " + Amount +"$ FROM " + adm.GetDouble("money",ID) + "$",450);
+                if(Amount > adm.GetDouble("money" ,ID)){ // get money from database
+                    EmployeeInterface.AddedMoneyStage(stage,"CANNOT WITHDRAW " + Amount +"$ FROM " + adm.GetDouble("money",ID) + "$",450);
                 }else{
                     double AmountAfterWithdraw = adm.GetDouble("money" ,ID) - Amount;
                     adm.UpdateDoubleAccount("money" , AmountAfterWithdraw ,ID);
-                    AddedMoneyStage(stage, "WITHDRAWN " + Amount + "$ SUCCESSFULLY",300);
+                    EmployeeInterface.AddedMoneyStage(stage, "WITHDRAWN " + Amount + "$ SUCCESSFULLY",300);
                 }
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
@@ -1058,132 +758,23 @@ public class BankOfLebanonEmployeeApplication extends Application {
         Withdraw.setX(1280 / 3.1);
         Withdraw.setY(30);
         Withdraw.setScene(WithdrawScene);
+        Withdraw.initOwner(stage);
         Withdraw.show();
         Withdraw.setTitle("Client Withdraw");
     }
-    private Scene InterestMonthly(Stage Interest, Scene YearlyInterestScene)throws SQLException, ClassNotFoundException{
-        BorderPane pane = new BorderPane();
-
-        Scene MonthlyInterestScene = new Scene(pane, 720, 650);
-        MonthlyInterestScene.getStylesheets().addAll("Style1.css", "Style2.css");
-
-        StackPane InterestStackPane = new StackPane();
-
-        Text MonthlyInterestText = new Text("MONTHLY INTEREST");
-        MonthlyInterestText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
-        MonthlyInterestText.setFill(Color.rgb(65,95,169));
-
-        TextField tfYears = ManageClientTextField("Number of years");
-        TextField tfInterest = ManageClientTextField("Interest rate");
-        TextField tfInterestAmount = ManageClientTextField("Interest Amount");
-        TextField tfInterestValue = ManageClientTextField("Total Amount");
-        Button btCalculate = new Button("Calculate Interest Amount");
-
-        btCalculate.setTextFill(Color.WHITE);
-        btCalculate.setId("BTN");
-        style.ChangeButtonColor(btCalculate,"BTN","BTN2");
-
-        Button btAddToClient = new Button("Add Interest To Client");
-
-        btAddToClient.setTextFill(Color.WHITE);
-        btAddToClient.setId("BTN");
-        style.ChangeButtonColor(btAddToClient,"BTN","BTN2");
-
-        Button btNextScene = new Button("Yearly Interest");
-
-        btNextScene.setTextFill(Color.WHITE);
-        btNextScene.setId("BTN");
-        style.ChangeButtonColor(btNextScene,"BTN","BTN2");
-
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(5);
-        gridPane.setVgap(45);
-
-        TextField AccountNB = ManageClientTextField("Account ID");
-        AccountNB.setText(Integer.toString(ID));
-
-        gridPane.add(MonthlyInterestText,0,0);
-        gridPane.add(new Label("Account ID"),0,1);
-        gridPane.add(AccountNB,1,1);
-        gridPane.add(new Label("Years"), 0, 2);
-        gridPane.add(tfYears, 1, 2);
-        gridPane.add(new Label("Interest Rate"), 0, 3);
-        gridPane.add(tfInterest, 1, 3);
-        gridPane.add(new Label("Interest Amount"), 0, 4);
-        gridPane.add(tfInterestAmount, 1, 4);
-        gridPane.add(new Label("Total Payment"), 0, 5);
-        gridPane.add(tfInterestValue, 1, 5);
-        gridPane.add(btCalculate, 0, 6);
-        gridPane.add(btAddToClient, 1,6);
-        gridPane.add(btNextScene, 2,6);
-
-        gridPane.setAlignment(Pos.CENTER);
-        tfYears.setAlignment(Pos.BOTTOM_LEFT);
-        tfInterest.setAlignment(Pos.BOTTOM_LEFT);
-        tfInterestAmount.setAlignment(Pos.BOTTOM_LEFT);
-        tfInterestValue.setAlignment(Pos.BOTTOM_LEFT);
-        tfInterestValue.setEditable(false);
-        AccountNB.setEditable(false);
-
-        InterestStackPane.getChildren().addAll(Frame(500,530), gridPane);
-        pane.setCenter(InterestStackPane);
-
-        Interest interest = new Interest();
-
-        btCalculate.setOnAction(e->{
-            interest.calculateMInterest(tfYears,tfInterest,tfInterestAmount,tfInterestValue);
-        });
-
-        btAddToClient.setOnAction(e->{
-            try {
-                if(adm.GetBoolean("isInterest", ID)) {
-                    ClientHasStage(Interest, "INTEREST");
-                } else{
-                    try{
-                        double InterestAmount = Double.parseDouble(tfInterestValue.getText());
-                        if(Double.parseDouble(tfInterestValue.getText()) == 0 || tfInterestValue.getText().isEmpty()) {
-                            ErrorNotCalculatedStage(Interest);
-                        }else{
-                            adm.UpdateDoubleAccount("InterestAmount",InterestAmount,ID);
-                            adm.UpdateBooleanAccount("isInterest",true,ID);
-                            AddedMoneyStage(Interest,"ADDED INTEREST SUCCESSFULLY !",300);
-                        }
-                    }catch (NumberFormatException nfe){
-                        ErrorNotFoundStage(Interest);
-                    }
-                }
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        btNextScene.setOnAction(e->{
-            Interest.setScene(YearlyInterestScene);
-        });
-
-        // Set position of second window, related to primary window.
-        Interest.setX(1280 / 3.1);
-        Interest.setY(30);
-        Interest.setScene(YearlyInterestScene);
-        Interest.show();
-        Interest.setTitle("Client Interest");
-
-        return MonthlyInterestScene;
-    }
 
     //Major Panes ( For Management )
-    private GridPane LoginGridPane(Stage stage) throws FileNotFoundException, SQLException {
+    private GridPane LoginGridPane(Stage stage) throws FileNotFoundException{
+        //Declare GridPane
         GridPane LoginGridPane = new GridPane();
-        Employee emp = new Employee();
-        EmployeesDatabaseManip emps = new EmployeesDatabaseManip();
 
         LoginGridPane.setVgap(20);
         LoginGridPane.setHgap(-40);
         LoginGridPane.setAlignment(Pos.TOP_CENTER);
         LoginGridPane.setPadding(new Insets(320,10,10,10));
 
-        TextField EmployeeID = new TextField();
-        TextField Password = new TextField();
+        TextField EmployeeID = ManageClientTextField("Employee ID");
+        TextField Password =ManageClientTextField("Password");
 
         Button LoginButton = ManageClientButton("Login",80,30);
         LoginButton.setTextFill(Color.WHITE);
@@ -1191,22 +782,14 @@ public class BankOfLebanonEmployeeApplication extends Application {
         LoginButton.setId("BTN");
         style.ChangeButtonColor(LoginButton,"BTN","BTN2");
 
-
+        //Login Template
         boolean isIdFound = false;
         String EmployeeS = EmployeeID.getText();
         boolean isPasswordFound = false;
         String passwordS = Password.getText();
 
-        emps.FillEmployeesArray();
         LoginButton.setOnAction(e->{
-
-            //for (int i = 0; i < emps.getEmployees().size(); i++) {
-                //if (EmployeeS.equals(emps.getEmployees().get(i).toString()) && passwordS.equals(emps.getEmployees().get(i).toString())) {
-                    stage.setScene(EmployeeInterface);
-                    //break;
-                //}
-            //}
-            //ErrorEmployeeStage(stage);
+            stage.setScene(EmployeeInterface);
         });
 
         Label employee_id = ManageClientLabel("");
@@ -1219,32 +802,29 @@ public class BankOfLebanonEmployeeApplication extends Application {
         LoginGridPane.add(password,0,1);
         LoginGridPane.add(Password,1,1);
         LoginGridPane.add(LoginButton,0,2);
-
         return LoginGridPane;
     }
-    private FlowPane ManageClientFlowPane(Stage stage) throws FileNotFoundException, SQLException, ClassNotFoundException {
+    private FlowPane ManageClientFlowPane(Stage stage) throws FileNotFoundException{
         FlowPane ManageFlowPane = new FlowPane();
 
         HBox AddClientHBox = new HBox();
         AddClientHBox.setAlignment(Pos.CENTER_LEFT);
         AddClientHBox.setSpacing(10);
 
-        Label AddClientLabel = new Label();
-        AddClientLabel.setText("Add Clients to the database, can be checked or edited or deleted in the CheckClients Field");
+        Label AddClientLabel = ManageClientLabel("Add Clients to the database, can be checked or edited or deleted in the CheckClients Field");
         AddClientLabel.setFont(new Font("Helvetica", 15));
 
         Button AddClient = ManageClientButton("",65,65);
         AddClientHBox.getChildren().addAll(AddClient, AddClientLabel);
         AddClient.setGraphic(EmployeeInterface.ButtonImageView("src/main/images/clientAdd.png"));
-        AddClient.setId("BTNX");
+        AddClient.setId("BTNX"); // Set the CSS ID
         style.ChangeButtonColor(AddClient,"BTNX","BTNX2");
 
         HBox MoneyClientHBox = new HBox();
         MoneyClientHBox.setAlignment(Pos.CENTER_LEFT);
         MoneyClientHBox.setSpacing(10);
 
-        Label MoneyClientLabel = new Label();
-        MoneyClientLabel.setText("Deposit, Withdraw, add Loan or Interest for a specific Client");
+        Label MoneyClientLabel = ManageClientLabel("Deposit, Withdraw, add Loan or Interest for a specific Client");
         MoneyClientLabel.setFont(new Font("Helvetica", 15));
 
         Button MoneyClient = ManageClientButton("",65,65);
@@ -1257,42 +837,39 @@ public class BankOfLebanonEmployeeApplication extends Application {
         CheckClientHBox.setAlignment(Pos.CENTER_LEFT);
         CheckClientHBox.setSpacing(10);
 
-        Label CheckClientLabel = new Label();
-        CheckClientLabel.setText("All Clients from the Database will be shown in this Field, can search, edit and remove specific clients");
+        Label CheckClientLabel = ManageClientLabel("All Clients from the Database will be shown in this Field, can search, edit and remove specific clients");
         CheckClientLabel.setFont(new Font("Helvetica", 15));
 
         Button CheckClient = ManageClientButton("",65,65);
         CheckClientHBox.getChildren().addAll(CheckClient, CheckClientLabel);
         CheckClient.setGraphic(EmployeeInterface.ButtonImageView("src/main/images/ClientsS.png"));
-        CheckClient.setId("BTNX");
+        CheckClient.setId("BTNX");// Set the CSS ID
         style.ChangeButtonColor(CheckClient,"BTNX","BTNX2");
 
         HBox CheckDatabaseHBox = new HBox();
         CheckDatabaseHBox.setAlignment(Pos.CENTER_LEFT);
         CheckDatabaseHBox.setSpacing(10);
 
-        Label CheckDatabaseLabel = new Label();
-        CheckDatabaseLabel.setText("Check if the Connection between the app and the database is secure and safe, if not please contact staff");
+        Label CheckDatabaseLabel = ManageClientLabel("Check if the Connection between the app and the database is secure and safe, if not please contact staff");
         CheckDatabaseLabel.setFont(new Font("Helvetica", 15));
 
         Button CheckDatabaseConnectivity = ManageClientButton("",65,65);
         CheckDatabaseHBox.getChildren().addAll(CheckDatabaseConnectivity, CheckDatabaseLabel);
         CheckDatabaseConnectivity.setGraphic(EmployeeInterface.ButtonImageView("src/main/images/Clients.png"));
-        CheckDatabaseConnectivity.setId("BTNX");
+        CheckDatabaseConnectivity.setId("BTNX");// Set the CSS ID
         style.ChangeButtonColor(CheckDatabaseConnectivity,"BTNX","BTNX2");
 
         HBox CheckAccountsHBox = new HBox();
         CheckAccountsHBox.setAlignment(Pos.CENTER_LEFT);
         CheckAccountsHBox.setSpacing(10);
 
-        Label CheckAccountsLabel = new Label();
-        CheckAccountsLabel.setText("All Accounts from the Database will be shown in this Field");
+        Label CheckAccountsLabel = ManageClientLabel("All Accounts from the Database will be shown in this Field");
         CheckAccountsLabel.setFont(new Font("Helvetica", 15));
 
         Button CheckAccounts = ManageClientButton("",65,65);
         CheckAccountsHBox.getChildren().addAll(CheckAccounts, CheckAccountsLabel);
         CheckAccounts.setGraphic(EmployeeInterface.ButtonImageView("src/main/images/Account.png"));
-        CheckAccounts.setId("BTNX");
+        CheckAccounts.setId("BTNX");// Set the CSS ID
         style.ChangeButtonColor(CheckAccounts,"BTNX","BTNX2");
 
         ManageFlowPane.setOrientation(Orientation.VERTICAL);
@@ -1303,6 +880,7 @@ public class BankOfLebanonEmployeeApplication extends Application {
 
         ManageFlowPane.getChildren().addAll(AddClientHBox,CheckClientHBox,MoneyClientHBox,CheckAccountsHBox,CheckDatabaseHBox);
 
+        //Buttons functions
         AddClient.setOnAction(e->{
             stage.setScene(AddClientInterface);
         });
@@ -1313,17 +891,15 @@ public class BankOfLebanonEmployeeApplication extends Application {
             stage.setScene(CheckAccountsInterface);
         });
         CheckDatabaseConnectivity.setOnAction(e->{
-            DataBaseConnectivity(stage);
+            EmployeeInterface.DataBaseConnectivity(stage);
         });
         CheckClient.setOnAction(e->{
             stage.setScene(CheckClientsInterface);
         });
-
-        accounts_observable = adm.getAccountList();
-
         return ManageFlowPane;
     }
     private GridPane AddClientGridPane(Stage stage){
+        //Declare GridPane
         GridPane AddClientGridPane = new GridPane();
 
         AddClientGridPane.setAlignment(Pos.CENTER);
@@ -1331,39 +907,36 @@ public class BankOfLebanonEmployeeApplication extends Application {
         AddClientGridPane.setVgap(24);
         AddClientGridPane.setPadding(new Insets(10,10,10,10));
 
+        //Declare Buttons
         Button Generate = ManageClientButton("Generate",30,15);
         Generate.setTextFill(Color.WHITE);
-
-        Generate.setId("BTN");
-        style.ChangeButtonColor(Generate,"BTN","BTN2");
+        Generate.setId("BTN");// Set the CSS ID
+        style.ChangeButtonColor(Generate,"BTN","BTN2");// CSS Related - Check Styling Class
 
         Button SubmitClient = ManageClientButton("Submit",30,15);
         SubmitClient.setTextFill(Color.WHITE);
-
-        SubmitClient.setId("BTN");
-        style.ChangeButtonColor(SubmitClient,"BTN","BTN2");
+        SubmitClient.setId("BTN");// Set the CSS ID
+        style.ChangeButtonColor(SubmitClient,"BTN","BTN2");// CSS Related - Check Styling Class
 
         Button ClearClient = ManageClientButton("Clear",30,15);
         ClearClient.setTextFill(Color.WHITE);
-
-        ClearClient.setId("BTN");
-        style.ChangeButtonColor(ClearClient,"BTN","BTN2");
+        ClearClient.setId("BTN");// Set the CSS ID
+        style.ChangeButtonColor(ClearClient,"BTN","BTN2");// CSS Related - Check Styling Class
 
         Button BackClient = ManageClientButton("Back",30,15);
         BackClient.setTextFill(Color.WHITE);
+        BackClient.setId("BTN");// Set the CSS ID
+        style.ChangeButtonColor(BackClient,"BTN","BTN2");// CSS Related - Check Styling Class
 
-        BackClient.setId("BTN");
-        style.ChangeButtonColor(BackClient,"BTN","BTN2");
-
+        //Declare TextFields
         TextField AccountNumber = ManageClientTextField("Client's Account Number");
         String randomS = Integer.toString(GeneralUtil.GenerateRandom());
-        AccountNumber.setText(randomS);
+        AccountNumber.setText(randomS); //Set the Value of the TextField
         TextField FirstName = ManageClientTextField("Client's First Name");
         TextField LastName = ManageClientTextField("Client's Last Name");
         TextField Address = ManageClientTextField("Client's Address");
         TextField Email = ManageClientTextField("Client's Email");
         TextField TelephoneNumber = ManageClientTextField("Client's phone");
-
         TextField Job = ManageClientTextField("Client's Job");
         TextField AccountCreationDate = ManageClientTextField("Date");
 
@@ -1371,8 +944,9 @@ public class BankOfLebanonEmployeeApplication extends Application {
         LocalDate today = LocalDate.now();
         String Stoday = today.toString();
 
-        AccountCreationDate.setText(Stoday);
+        AccountCreationDate.setText(Stoday); //Set the TextField value
 
+        //Declare Labels
         Label first_name = ManageClientLabel("First Name");
         Label last_name = ManageClientLabel("Last Name");
         Label email = ManageClientLabel("Email");
@@ -1385,16 +959,15 @@ public class BankOfLebanonEmployeeApplication extends Application {
         Label gender = ManageClientLabel("Gender");
         Label job_name = ManageClientLabel("Job Name");
 
+        //City ComboBox
         String[] cities =
                 { "Beirut", "Tripoli", "Tyre", "Byblos","Jounieh","Sidon","Baalbak","Nabatieh","Batroun","Baabda","Aley"};
-
         ComboBox<String> Cities =
                 AddClientComboBox("City",cities);
         Cities.setId("combo");
-
         HBox CitiesHBox = AddClientCitiesHBox(Cities);
 
-        //Birthdate
+        //Birthdate ComboBox
         String[] month_days =
                 { "1", "2", "3","4", "5","6","7","8","9","10","11","12"
                         ,"13","14","15","16","17","18","19","20",
@@ -1403,10 +976,8 @@ public class BankOfLebanonEmployeeApplication extends Application {
                 AddClientComboBox("Day", month_days);
         combo_box_month_days.setId("combo");
 
-
         String[] month_names ={"1","2","3","4","5","6",
                 "7","8","9","10","11","12"};
-
         ComboBox<String> combo_box_month_names =
                 AddClientComboBox("Month", month_names);
         combo_box_month_names.setId("combo");
@@ -1417,18 +988,18 @@ public class BankOfLebanonEmployeeApplication extends Application {
                 "1980","1981","1982","1983","1984","1988","1986","1987","1988","1989","1990",
                 "1990","1991","1992","1993","1994","1999","1996","1997","1998","1999","2000",
                 "2001","2002","2003"};
-
         ComboBox<String> combo_box_years =
                 AddClientComboBox("Year", year_number);
         combo_box_years.setId("combo");
-
         HBox BirthDateHBox = AddClientBirthDateHBox(combo_box_month_days,combo_box_month_names,combo_box_years);
 
+        //Gender Toggle Group
         ToggleGroup GenderToggleGroup = new ToggleGroup();
         RadioButton male = AddClientRadioButton("Male", GenderToggleGroup);
         RadioButton female = AddClientRadioButton("Female", GenderToggleGroup);
         HBox GenderRadioHBox = AddClientRadioHBox(male,female);
 
+        //Status Toggle Group
         ToggleGroup MarriedToggleGroup = new ToggleGroup();
         RadioButton married = AddClientRadioButton("Married", MarriedToggleGroup);
         RadioButton single = AddClientRadioButton("Single",  MarriedToggleGroup);
@@ -1467,30 +1038,29 @@ public class BankOfLebanonEmployeeApplication extends Application {
         AddClientGridPane.add(account_creation_date,0,12);
         AddClientGridPane.add(AccountCreationDate,1,12);
         AccountCreationDate.setEditable(false);
-
         AddClientGridPane.add(AddClientButtonsHBox(BackClient,ClearClient,SubmitClient),1,13);
 
-        //Submit Client Button is called
+        //Buttons Functions
         SubmitClient.setOnAction(e -> {
-
             //Call GeneralUtil static methods to make sure if formats are correct
             boolean isValidPhone = GeneralUtil.isValidPhone(TelephoneNumber.getText());
             boolean isValidEmail = GeneralUtil.isValidEmail(Email.getText());
 
             //Check if Email and Phone number are correct and if there's any empty text field or any null values
             if(!isValidPhone || !isValidEmail || FirstName.getText().isEmpty() || LastName.getText().isEmpty()
-                    || Address.getText().isEmpty() || Job.getText().isEmpty() || combo_box_month_days.getValue() == null
-                    || combo_box_month_names.getValue() == null || combo_box_years.getValue() == null
-                    || Cities.getValue() == null || !male.isSelected() && !female.isSelected() || !married.isSelected() && !single.isSelected()){
-                ErrorClientStage(stage);
+                    || Address.getText().isEmpty() || Job.getText().isEmpty() || combo_box_month_days.getValue() == null || combo_box_month_days.getValue().equals("Day")
+                    || combo_box_month_names.getValue() == null || combo_box_month_names.getValue().equals("Month") || combo_box_years.getValue() == null
+                    || combo_box_years.getValue().equals("Year") || Cities.getValue() == null || Cities.getValue().equals("City")
+                    || !male.isSelected() && !female.isSelected() || !married.isSelected() && !single.isSelected()){
+                EmployeeInterface.ErrorClientStage(stage);
             }else{
                 //if values are correctly set
-                //Initialize Values
+                //Initialize Values for Database and Observable List
                 String ClientStatus = "";
                 String Gender = "";
                 String birthdate = combo_box_month_days.getValue() + "/" + combo_box_month_names.getValue() + "/" + combo_box_years.getValue();
                 String City = Cities.getValue();
-
+                //Assign values to the Strings
                 if (married.isSelected())
                     ClientStatus = "married";
                 else if (single.isSelected())
@@ -1509,15 +1079,17 @@ public class BankOfLebanonEmployeeApplication extends Application {
                     cdm.InsertClient(acc_nb, FirstName.getText(), LastName.getText(), Email.getText(), TelephoneNumber.getText(), Address.getText(),
                             Job.getText(), City, ClientStatus, Gender, birthdate,Stoday);
                     //Insert new account into the Account Database
-                    adm.InsertAccount(acc_nb,0,false,0,false,0);
+                    adm.InsertAccount(acc_nb,100,false,0,false,0);
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
                 //Add Client to Observable List
                 clients_observable.add(new Client(acc_nb, FirstName.getText(), LastName.getText(), Email.getText(), TelephoneNumber.getText(), Address.getText(),
                         Job.getText(), City, ClientStatus, Gender, birthdate,Stoday));
-                accounts_observable.add(new Account(acc_nb,0,false,false,0,0));
+                //Add Account to Observable List
+                accounts_observable.add(new Account(acc_nb,100,false,false,0,0));
 
+                //Clear Fields
                 FirstName.clear();
                 LastName.clear();
                 Email.clear();
@@ -1532,13 +1104,13 @@ public class BankOfLebanonEmployeeApplication extends Application {
                 combo_box_month_names.setPromptText(null);
                 combo_box_years.setPromptText(null);
                 Cities.setPromptText(null);
-
-                AddedClientStage(stage);
+                //Call Added Client Stage
+                EmployeeInterface.AddedClientStage(stage);
             }
 
         });
         ClearClient.setOnAction(e->{
-
+            //Clear All Fields
             FirstName.clear();
             LastName.clear();
             Email.clear();
@@ -1549,15 +1121,16 @@ public class BankOfLebanonEmployeeApplication extends Application {
             single.setSelected(false);
             male.setSelected(false);
             female.setSelected(false);
-            combo_box_month_days.setPromptText("Day");
-            combo_box_month_names.setPromptText("Month");
-            combo_box_years.setPromptText("Year");
-            Cities.setPromptText("City");
+            combo_box_month_days.setValue("Day");
+            combo_box_month_names.setValue("Month");
+            combo_box_years.setValue("Year");
+            Cities.setValue("City");
 
         });
         BackClient.setOnAction(e->{
+            //Call the Employee Interface Scene
             stage.setScene(EmployeeInterface);
-
+            //Clear All fields
             FirstName.clear();
             LastName.clear();
             Email.clear();
@@ -1573,15 +1146,14 @@ public class BankOfLebanonEmployeeApplication extends Application {
             combo_box_years.setPromptText("Year");
             Cities.setPromptText("City");
         });
-
         return AddClientGridPane;
     }
 
     //TableViews ( Accounts / Clients )
     private TableView<Client> CheckClientsTable(Button Remove,TextField fname){
-
+        //Declare TableView of Type Client
         TableView<Client> ClientsTable = new TableView<Client>();
-
+        //Set the Items from the Clients Observable List
         ClientsTable.setItems(clients_observable);
         ClientsTable.setMinWidth(800);
         ClientsTable.setMinHeight(580);
@@ -1671,7 +1243,7 @@ public class BankOfLebanonEmployeeApplication extends Application {
         telephoneNumberCol.setCellValueFactory(new PropertyValueFactory<Client,String>("telephone"));
         TableColumn addressCol = new TableColumn("Address");
         //Set prefWidth of the address Column by binding its width with table width
-        addressCol.prefWidthProperty().bind(ClientsTable.widthProperty().multiply(0.235));
+        addressCol.prefWidthProperty().bind(ClientsTable.widthProperty().multiply(0.225));
 
         addressCol.setCellFactory(TextFieldTableCell.forTableColumn());
         addressCol.setOnEditCommit(
@@ -1779,6 +1351,7 @@ public class BankOfLebanonEmployeeApplication extends Application {
                 emailCol,telephoneNumberCol,addressCol, jobCol,
                 isMarriedCol, genderCol, cityCol, birthDateCol,AccountDateCol);
 
+    // Search Filter System
         //Remove the selected item in the table from the Observable list when (Remove Button is Clicked)
         Remove.setOnAction(e->{
             //get Selected Client in table
@@ -1812,7 +1385,6 @@ public class BankOfLebanonEmployeeApplication extends Application {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
-
                 // Compare first name and last name of every person with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
 
@@ -1841,9 +1413,10 @@ public class BankOfLebanonEmployeeApplication extends Application {
         return ClientsTable;
     }
     private TableView<Account> CheckAccountTable(TextField accountNb){
-
+        //Declare TableView of Type Account
         TableView<Account> AccountsTable = new TableView<Account>();
 
+        //Set the Items from the Accounts Observable List
         AccountsTable.setItems(accounts_observable);
         AccountsTable.setMinWidth(800);
         AccountsTable.setMinHeight(580);
@@ -1875,34 +1448,29 @@ public class BankOfLebanonEmployeeApplication extends Application {
 
         AccountsTable.getColumns().addAll(accountNumberCol, AccountBalanceCol,AccountIsLoanCol,AccountIsInterestCol,AccountLoanAmountCol,AccountInterestAmountCol);
 
+    // Search Filter System
         FilteredList<Account> filteredData = new FilteredList<>(accounts_observable, b -> true);
 
         // 2. Set the filter Predicate whenever the filter changes.
         accountNb.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(account -> {
                 // If filter text is empty, display all persons.
-
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
-
                 // Compare first name and last name of every person with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
-
                 if (String.valueOf(account.getAccount_number()).toLowerCase().contains(lowerCaseFilter)) {
                     return true; // Filter matches first name.
                 } else
                     return false; // Does not match.
             });
         });
-
         // 3. Wrap the FilteredList in a SortedList.
         SortedList<Account> sortedData = new SortedList<>(filteredData);
-
         // 4. Bind the SortedList comparator to the TableView comparator.
         // 	  Otherwise, sorting the TableView would have no effect.
         sortedData.comparatorProperty().bind(AccountsTable.comparatorProperty());
-
         // 5. Add sorted (and filtered) data to the table.
         AccountsTable.setItems(sortedData);
         return AccountsTable;
@@ -1918,27 +1486,23 @@ public class BankOfLebanonEmployeeApplication extends Application {
         return LoginFormStackPane;
     }
     private StackPane EmployeeForm(Stage stage) throws FileNotFoundException {
+        //Declare Nodes and Panes
         StackPane EmployeeStackPane = new StackPane();
+        Button ManageAccount = ManageClientButton("Account Info",60,20);
+        Button Logout = ManageClientButton("Logout",60,20);
 
         EmployeeStackPane.setMinHeight(700);
 
-        //Frame for Employee FlowPane
-        Rectangle Frame = Frame(1000,250);
-
-        Button ManageAccount = ManageClientButton("Account Info",60,20);
-
         ManageAccount.setId("BTN");
         style.ChangeButtonColor(ManageAccount,"BTN","BTN2");
+
+        Logout.setId("BTN");
+        style.ChangeButtonColor(Logout,"BTN","BTN2");
 
         ManageAccount.setAlignment(Pos.CENTER);
         ManageAccount.setMinWidth(150);
         ManageAccount.setTranslateY(EmployeeStackPane.getHeight()-250);
         ManageAccount.setTextFill(Color.WHITE);
-
-        Button Logout = ManageClientButton("Logout",60,20);
-
-        Logout.setId("BTN");
-        style.ChangeButtonColor(Logout,"BTN","BTN2");
 
         Logout.setAlignment(Pos.CENTER);
         Logout.setMinWidth(150);
@@ -1946,14 +1510,15 @@ public class BankOfLebanonEmployeeApplication extends Application {
         Logout.setTextFill(Color.WHITE);
 
         Logout.setOnAction(e->{
+            //Call the Login Interface scene
             stage.setScene(LoginInterface);
         });
         ManageAccount.setOnAction(e->{
-            ManageClientStage(stage);
+            //Call the Manage Client Stage
+            EmployeeInterface.ManageClientStage(stage);
         });
 
-        EmployeeStackPane.getChildren().addAll(Frame, EmployeeInterface.EmployeeTextInfoHBox(),ManageAccount,Logout);
-
+        EmployeeStackPane.getChildren().addAll(Frame(1000,250), EmployeeInterface.EmployeeTextInfoHBox(),ManageAccount,Logout);
         return EmployeeStackPane;
     }
     private StackPane AddClientForm(Stage stage){
@@ -1964,11 +1529,17 @@ public class BankOfLebanonEmployeeApplication extends Application {
         return  AddClientStackPane;
     }
     private VBox CheckClientsForm(Stage stage){
-
+        //Declare Nodes and Panes
         VBox CheckClientsVBox = new VBox();
         HBox textHBox = new HBox();
-
+        TextField SearchField = ManageClientTextField("AccountNb/ FirstName / LastName");
+        Label SearchL = ManageClientLabel("Search Value");
+        StackPane ButtonsStackPane = new StackPane();
+        HBox ButtonsHBox = new HBox();
+        Button Remove = new Button("Remove Client");
+        Button Back = new Button(" Back ");
         Text text = new Text();
+
         text.setText("CLIENTS TABLE");
         text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         text.setFill(Color.rgb(65,95,169));
@@ -1976,24 +1547,16 @@ public class BankOfLebanonEmployeeApplication extends Application {
         textHBox.getChildren().add(text);
         textHBox.setAlignment(Pos.CENTER);
 
-        StackPane ButtonsStackPane = new StackPane();
-        HBox ButtonsHBox = new HBox();
-
         CheckClientsVBox.setAlignment(Pos.CENTER);
         CheckClientsVBox.setSpacing(20);
         CheckClientsVBox.setPadding(new Insets(10,10,10,10));
 
-        TextField SearchField = new TextField();
         SearchField.setPrefWidth(200);
-        SearchField.setPromptText("AccountNb/ FirstName / LastName");
-        Label SearchL = new Label("Search Value");
 
-        Button Remove = new Button("Remove Client");
         Remove.setTextFill(Color.WHITE);
         Remove.setId("BTN");
         style.ChangeButtonColor(Remove,"BTN","BTN2");
 
-        Button Back = new Button(" Back ");
         Back.setTextFill(Color.WHITE);
         Back.setId("BTN");
         style.ChangeButtonColor(Back,"BTN","BTN2");
@@ -2007,10 +1570,13 @@ public class BankOfLebanonEmployeeApplication extends Application {
         ButtonsStackPane.setAlignment(Pos.CENTER_LEFT);
 
         Remove.setOnAction(e->{
+            //Call the Clients TableView
             CheckClientsTable(Remove,SearchField);
+            //Remove the selected Client through Remove argument
         });
 
         Back.setOnAction(e->{
+            //Call the Employee Interface
             stage.setScene(EmployeeInterface);
         });
 
@@ -2018,11 +1584,15 @@ public class BankOfLebanonEmployeeApplication extends Application {
         return CheckClientsVBox;
     }
     private VBox CheckAccountsForm(Stage stage){
-
+        //Declare Nodes and Panes
         VBox CheckClientsVBox = new VBox();
         HBox textHBox = new HBox();
-
+        StackPane ButtonsStackPane = new StackPane();
+        HBox ButtonsHBox = new HBox();
+        TextField SearchField = ManageClientTextField("Account Number");
+        Label SearchL = ManageClientLabel("Search Value");
         Text text = new Text();
+
         text.setText("ACCOUNTS TABLE");
         text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         text.setFill(Color.rgb(65,95,169));
@@ -2030,17 +1600,11 @@ public class BankOfLebanonEmployeeApplication extends Application {
         textHBox.getChildren().add(text);
         textHBox.setAlignment(Pos.CENTER);
 
-        StackPane ButtonsStackPane = new StackPane();
-        HBox ButtonsHBox = new HBox();
-
         CheckClientsVBox.setAlignment(Pos.CENTER);
         CheckClientsVBox.setSpacing(20);
         CheckClientsVBox.setPadding(new Insets(10,10,10,10));
 
-        TextField SearchField = new TextField();
         SearchField.setPrefWidth(200);
-        SearchField.setPromptText("Account Number");
-        Label SearchL = new Label("Search Value");
 
         Button Back = new Button(" Back ");
         Back.setTextFill(Color.WHITE);
